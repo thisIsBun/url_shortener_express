@@ -28,7 +28,6 @@ app.get('/', (req, res) => {
 })
 
 app.post('/', (req, res) => {
-  const shortURL = `${req.headers.origin}/`
   const shortCode = shortenURL(urlLength)
 
   URL.findOne({ originURL: req.body.url })
@@ -36,7 +35,7 @@ app.post('/', (req, res) => {
       return data ? data : URL.create({ shortCode, originURL: req.body.url })
     })
     .then(data => {
-      res.render('home', { shortURL: shortURL + data.shortCode })
+      res.render('home', { shortURL: req.headers.origin + '/' + data.shortCode })
     })
     .catch(error => console.log(error))
   })
@@ -44,7 +43,13 @@ app.post('/', (req, res) => {
 app.get('/:shortCode', (req, res) => {
   const { shortCode } = req.params
   URL.findOne({ shortCode })
-    .then(data => res.redirect(data.originURL))
+    .then(data => {
+      if (data) {
+        res.redirect(data.originURL)
+      } else {
+        res.render('error', { errorURL: 'http://' + req.headers.host + '/' + shortCode })
+      }
+    })
     .catch(error => console.log(error))
 })
 
