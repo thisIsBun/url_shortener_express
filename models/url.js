@@ -3,7 +3,7 @@ import mongoose from "mongoose";
 const Schema = mongoose.Schema
 
 const urlSchema = new Schema({
-  shortURL: {
+  shortCode: {
     type: String,
     require: true
   },

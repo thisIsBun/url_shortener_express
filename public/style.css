@@ -27,6 +27,10 @@ h1, p {
   margin: 0;
 }
 
+h3#shortURL {
+  color: var(--accent-color);
+}
+
 img {
   width: 100px;
   height: 100px;
@@ -64,10 +68,10 @@ input:focus {
   outline: none;
 }
 
-button.shorten {
+button {
   font-size: var(--fz-md);
   padding: 8px 12px;
-  width: 35%;
+  width: 250px;
   border: 1px solid var(--accent-color);
   color: var(--accent-color);
   background-color: transparent;

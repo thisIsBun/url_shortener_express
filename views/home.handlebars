@@ -1,6 +1,28 @@
+{{#if shortURL}}
+<div >
+  <h3>Success! Please use this link:</h3>
+  <h3 id="shortURL">{{shortURL}}</h3>
+</div>
+<button id="copyBtn">複製</button>
+<script>
+  const copyBtn = document.getElementById('copyBtn')
+  const copyText = document.getElementById('shortURL').innerText
+
+  copyBtn.addEventListener('click', (event) => {
+    const { innerText } = event.target
+
+    navigator.clipboard.writeText(copyText)
+      .then(() => alert('已複製'))
+      .catch(() => alert('複製失敗'))
+
+  })
+</script>
+
+{{else}}
 <form action="/" method="POST">
   <div class="container">
     <input type="text" name="url" placeholder="請輸入網址" required>
     <button class="shorten" type="submit">縮址</button>
   </div>
 </form>
+{{/if}}

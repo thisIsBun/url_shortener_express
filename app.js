@@ -28,15 +28,24 @@ app.get('/', (req, res) => {
 })
 
 app.post('/', (req, res) => {
-  const endPrefix = shortenURL(urlLength)
-  const document = {
-    shortURL: `http://localhost/${endPrefix}`,
-    originURL: req.body.url
-  }
+  const shortURL = `${req.headers.origin}/`
+  const shortCode = shortenURL(urlLength)
 
-  URL.create(document)
-    .then(() => res.render('home', { shortURL: endPrefix }))
-    .catch(error => console.log(error))  
+  URL.findOne({ originURL: req.body.url })
+    .then(data => {
+      return data ? data : URL.create({ shortCode, originURL: req.body.url })
+    })
+    .then(data => {
+      res.render('home', { shortURL: shortURL + data.shortCode })
+    })
+    .catch(error => console.log(error))
+  })
+  
+app.get('/:shortCode', (req, res) => {
+  const { shortCode } = req.params
+  URL.findOne({ shortCode })
+    .then(data => res.redirect(data.originURL))
+    .catch(error => console.log(error))
 })
 
 app.listen(port, () => {
